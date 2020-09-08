@@ -15,4 +15,8 @@ defmodule SimpleHttp do
   def hello do
     :world
   end
+
+  def branch do
+    :dev
+  end
 end

@@ -2,10 +2,11 @@ defmodule SimpleHttp do
   require Logger
 
   def start_link(port: port) do
-    {:ok, socket} = :gen_tcp.listen(port, active: false, packet: :http_bin, reuseaddr: true)
+    {:ok, socket} =
+      :gen_tcp.listen(port, [active: false, packet: :http_bin, reuseaddr: true])
     Logger.info("Accepting connections on port #{port}")
 
-    {:ok, spawn_link(Http, :accept, [socket])}
+    {:ok, spawn_link(SimpleHttp, :accept, [socket])}
   end
 
   def accept(socket) do
@@ -34,6 +35,10 @@ defmodule SimpleHttp do
   end
 
   def child_spec(opts) do
-    %{id: Http, start: {Http, :start_link, [opts]}}
+    %{id: SimpleHttp, start: {SimpleHttp, :start_link, [opts]}}
+  end
+
+  def hello do
+    :world
   end
 end

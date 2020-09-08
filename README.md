@@ -1,6 +1,6 @@
 # SimpleHttp
 
-An app that stores up to 15 integers in a node. Starting with a single root node, each node can create other nodes. Nodes can be deleted, removing the list of integers.
+An app that stores up to 15 integers(randomly generated within user defined range) in a node. Starting with a single root node, each node can create other nodes. Nodes can be deleted, removing the list of integers.
 
 Nodes will be stored on a Postgresql database and exposed with http endpoints.
 

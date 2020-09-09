@@ -7,7 +7,7 @@ defmodule SimpleHttp.Application do
     port = String.to_integer(System.get_env("PORT") || "4040")
 
     children = [
-      {SimpleHttp, port}
+      {SimpleHttp.PlugAdapter, plug: CurrentTime, options: [port: port]}
     ]
     opts =
       [

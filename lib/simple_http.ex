@@ -4,57 +4,33 @@ defmodule SimpleHttp do
   Documentation for `SimpleHttp`.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> SimpleHttp.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
-  def branch do
-    :dev
-  end
-
-  def start_link(port: port) do
+  def start_link(port, dispatch) do
     {:ok, socket} =
       :gen_tcp.listen(port, [packet: :http_bin, active: false, reuseaddr: true])
       Logger.info("Accpeting connections on port #{port}")
 
-    {:ok, spawn_link(SimpleHttp, :accept, [socket])}
+    {:ok, spawn_link(SimpleHttp, :accept, [socket, dispatch])}
   end
 
-  def accept(socket) do
+  def accept(socket, dispatch) do
     {:ok, request} = :gen_tcp.accept(socket)
 
     spawn(fn ->
-      body = "Hello world! The time is #{Time.to_string(Time.utc_now())}"
-
-      response = """
-      HTTP/1.1 200\r
-      Content-Type: text/html\r
-      Content-Length: #{byte_size(body)}\r
-      \r
-      #{body}
-      """
-
-      send_request(request, response)
+      dispatch.(request)
     end)
 
-    accept(socket)
+    accept(socket, dispatch)
   end
 
-  def send_request(socket, response) do
+  def send_response(socket, response) do
     :gen_tcp.send(socket, response)
     :gen_tcp.close(socket)
   end
 
   def child_spec(opts) do
-    %{id: SimpleHttp, start: {SimpleHttp, :start_link, [opts]}}
+    %{
+      id: SimpleHttp,
+      start: {SimpleHttp, :start_link, [opts]}
+    }
   end
 end

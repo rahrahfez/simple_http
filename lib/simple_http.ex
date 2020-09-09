@@ -1,17 +1,14 @@
 defmodule SimpleHttp do
   require Logger
-
   @moduledoc """
   Documentation for `SimpleHttp`.
-  update dev
   """
-
-  def start_link(port, dispatch) do
+  def start_link(port) do
     {:ok, socket} =
       :gen_tcp.listen(port, [packet: :http_bin, active: false, reuseaddr: true])
       Logger.info("Accpeting connections on port #{port}")
 
-    {:ok, spawn_link(SimpleHttp, :accept, [socket, dispatch])}
+    {:ok, spawn_link(SimpleHttp, :accept, [socket])}
   end
 
   def accept(socket, dispatch) do
@@ -20,7 +17,6 @@ defmodule SimpleHttp do
     spawn(fn ->
       dispatch.(request)
     end)
-
     accept(socket, dispatch)
   end
 
@@ -34,6 +30,5 @@ defmodule SimpleHttp do
       id: SimpleHttp,
       start: {SimpleHttp, :start_link, [opts]}
     }
-
   end
 end

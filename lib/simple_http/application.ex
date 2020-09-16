@@ -8,7 +8,8 @@ defmodule SimpleHttp.Application do
     port = String.to_integer(System.get_env("PORT") || "4040")
 
     children = [
-      {Plug.Cowboy, scheme: :http, plug: SimpleHttp.Router, options: [port: port]}
+      {Plug.Cowboy, scheme: :http, plug: SimpleHttp.Router, options: [port: port]},
+      SimpleHttp.Repo
     ]
     opts =
       [

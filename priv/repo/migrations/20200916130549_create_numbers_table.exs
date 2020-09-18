@@ -3,9 +3,9 @@ defmodule SimpleHttp.Repo.Migrations.CreateNumbersTable do
 
   def change do
     create table(:simple_http) do
-      add :root, :string
+      add :root_name, :string
       add :list, {:array, :integer}
-      add :children, {:array, :integer}
+      add :root_id, :integer
     end
   end
 end

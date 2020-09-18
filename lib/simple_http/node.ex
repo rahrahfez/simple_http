@@ -1,11 +1,11 @@
-defmodule SimpleHttp.Root do
+defmodule SimpleHttp.Node do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @fields [:root_name, :list, :root_id]
+  @fields [:name, :list, :root_id]
 
-  schema "root" do
-    field :root_name, :string
+  schema "simple_http" do
+    field :name, :string
     field :list, {:array, :integer}
     field :root_id, :integer
   end
@@ -13,7 +13,7 @@ defmodule SimpleHttp.Root do
   def changeset(data, params \\ %{}) do
     data
     |> cast(params, @fields)
-    |> validate_required([:root_name])
+    |> validate_required([:name])
   end
 
   # defp validate_list_length(changeset) do

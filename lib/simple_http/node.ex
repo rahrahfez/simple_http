@@ -7,7 +7,7 @@ defmodule SimpleHttp.Node do
   schema "simple_http" do
     field :name, :string
     field :list, {:array, :integer}
-    field :root_id, :integer
+    field :root_id, :integer, default: 0
   end
 
   def changeset(data, params \\ %{}) do

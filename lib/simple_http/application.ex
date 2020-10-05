@@ -7,10 +7,10 @@ defmodule SimpleHttp.Application do
   def start(_type, _args) do
     port = String.to_integer(System.get_env("PORT") || "4040")
 
-    # children = [
-    #   {Plug.Cowboy, scheme: :http, plug: SimpleHttp.Router, options: [port: port]},
-    #   SimpleHttp.Repo
-    # ]
+    children = [
+      {Plug.Cowboy, scheme: :http, plug: SimpleHttp.Router, options: [port: port]},
+      {SimpleHttp.Repo, []}
+    ]
     opts =
       [
         name: SimpleHttp.Supervisor,
@@ -19,16 +19,6 @@ defmodule SimpleHttp.Application do
 
     Logger.info("Starting application...")
 
-    Supervisor.start_link(get_children(port), opts)
-  end
-
-  defp get_children(port) do
-    case Mix.env() do
-      :test -> []
-      _ -> [
-        SimpleHttp.Repo,
-        {Plug.Cowboy, scheme: :http, plug: SimpleHttp.Router, options: [port: port]}
-      ]
-    end
+    Supervisor.start_link(children, opts)
   end
 end
